@@ -1,0 +1,51 @@
+<h1>Liste des produits</h1>
+<button class="btn btn-outline btn-sm" (click)="addProduct()">Ajouter produit</button>
+
+<!-- Modal edition / ajout -->
+<app-add-or-edit-product-modal
+*ngIf="productModalOpen"
+[product]="selectedProduct"
+(finish)="handleFinish($event)"
+></app-add-or-edit-product-modal>
+
+<!-- Modal suppression -->
+<app-delete-product-modal
+*ngIf="delete"
+[product]="productToBeDelete"
+(cancel)="handleCancelDelete()"
+(confirm)="handleConfirmDelete()">
+</app-delete-product-modal>
+
+<clr-datagrid>
+  <clr-dg-column [style.width.px]="50">Id</clr-dg-column>
+  <clr-dg-column [style.width.px]="100">Nom</clr-dg-column>
+  <clr-dg-column [style.width.px]="500">Description</clr-dg-column>
+  <clr-dg-column>Prix</clr-dg-column>
+  <clr-dg-column>Stock</clr-dg-column>
+  <clr-dg-column [style.width.px]="50">Image</clr-dg-column>
+
+  <clr-dg-row *clrDgItems="let product of products">
+
+    <!-- Actions -->
+    <clr-dg-action-overflow>
+      <button class="action-item" (click)="onEdit(product)">Editer</button>
+      <button class="action-item" (click)="onDelete(product)">Supprimer</button>
+    </clr-dg-action-overflow>
+    <!-- end Actions -->
+
+    <clr-dg-cell>{{product.idProduct}}</clr-dg-cell>
+    <clr-dg-cell>{{product.name}}</clr-dg-cell>
+    <clr-dg-cell>{{product.description}}</clr-dg-cell>
+    <clr-dg-cell>{{product.price}}€</clr-dg-cell>
+    <clr-dg-cell>{{product.stock}} En stock</clr-dg-cell>
+    <clr-dg-cell><img width="50" [src]="baseUrlImage+product.image" [alt]="product.name"></clr-dg-cell>
+  </clr-dg-row>
+
+  <!-- <clr-dg-footer>{{products?.length}} produits</clr-dg-footer> -->
+  <clr-dg-footer>
+    <clr-dg-pagination #pagination [clrDgPageSize]="10">
+      <clr-dg-page-size [clrPageSizeOptions]="[10,20,50,100]">Produits par page</clr-dg-page-size>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} de {{pagination.totalItems}} produits
+    </clr-dg-pagination>
+  </clr-dg-footer>
+</clr-datagrid>

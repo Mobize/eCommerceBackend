@@ -1,0 +1,80 @@
+<clr-wizard #wizard [clrWizardOpen]="true">
+  <clr-wizard-title>{{ product != undefined ? 'Edition produit' : 'Ajouter produit'}}</clr-wizard-title>
+
+  <clr-wizard-button [type]="'cancel'" (click)='handleCancel()'>Annuler</clr-wizard-button>
+  <clr-wizard-button [type]="'previous'">Précédent</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Suivant</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'" (click)='handleFinish()'>Enregistrer</clr-wizard-button>
+
+  <clr-wizard-page><!-- #pageOne [clrWizardPageNextDisabled]="name.pristine" || !formPageOneValid -->
+    <ng-template clrPageTitle>Selectionnez une catégorie</ng-template>
+    <ng-template clrPageNavTitle>Etape 1</ng-template><!-- {{ pageOneTitle }} -->
+    <div class="clr-row category">
+      <div class="clr-col-md-6" *ngFor="let category of categories" >
+        <a href="javascript:void(0)" class="card clickable"
+        (click)="selectCategory(category.idCategory)" [ngClass]="{'active' : category.idCategory == idCategory}">
+          <div class="card-block">
+            <p class="card-text">
+              {{ category.name }}
+              <cds-icon [attr.shape]="category.icon"></cds-icon>
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </clr-wizard-page>
+
+  <form [formGroup]="productForm">
+    <clr-wizard-page><!-- #pageTwo -->
+      <ng-template clrPageTitle>Informations produit</ng-template>
+      <ng-template clrPageNavTitle>Etape 2</ng-template><!-- {{ pageTwoTitle }} -->
+      <div formGroupName="productInfos">
+        <clr-input-container>
+          <label>Nom du produit</label>
+          <input clrInput placeholder="Nom du produit ..." name="name" formControlName="name"/>
+        </clr-input-container>
+
+        <clr-textarea-container>
+          <label>Description</label>
+          <textarea clrTextarea name="description" formControlName="description"></textarea>
+        </clr-textarea-container>
+
+        <clr-input-container>
+          <label>Prix</label>
+          <input clrInput placeholder="Prix ..." name="price" formControlName="price"/>
+        </clr-input-container>
+
+        <clr-input-container>
+          <label>Stock</label>
+          <input clrInput placeholder="Stock ..." name="stock" formControlName="stock"/>
+        </clr-input-container>
+      </div>
+
+      <ng-template clrPageButtons>
+        <clr-wizard-button [type]="'cancel'" (click)='handleCancel()'>Annuler</clr-wizard-button>
+        <clr-wizard-button [type]="'previous'">Précédent</clr-wizard-button>
+        <clr-wizard-button [type]="'next'" [clrWizardButtonDisabled]="isProductInfosInvalid">Suivant</clr-wizard-button>
+      </ng-template>
+
+    </clr-wizard-page>
+
+    <clr-wizard-page><!-- #pageThree [clrWizardPageNextDisabled]="!formPageThreeValid" -->
+      <ng-template clrPageTitle>Photos</ng-template>
+      <ng-template clrPageNavTitle>Etape 3</ng-template><!-- {{ pageThreeTitle }} -->
+      <div formGroupName="illustration">
+        <clr-input-container>
+          <label>Ajouter Photos</label>
+          <input clrInput type="file" (change)="detectFiles($event)" accept="image/*" name="image" formControlName="image"/>
+        </clr-input-container>
+      </div>
+
+      <ng-template clrPageButtons>
+        <clr-wizard-button [type]="'cancel'" (click)='handleCancel()'>Annuler</clr-wizard-button>
+        <clr-wizard-button [type]="'previous'">Précédent</clr-wizard-button>
+        <clr-wizard-button [type]="'finish'" [clrWizardButtonDisabled]="isIllustrationInvalid" (click)='handleFinish()'>Enregistrer</clr-wizard-button>
+      </ng-template>
+
+    </clr-wizard-page>
+  </form>
+
+</clr-wizard>
